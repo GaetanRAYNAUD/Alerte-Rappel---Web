@@ -1,0 +1,60 @@
+{
+    "alertNumber": "SR/03965/25",
+    "publicationDate": "2025-12-11T16:27:47.03Z",
+    "risks": [
+        "Risque chimique"
+    ],
+    "riskDescription": "Le taux de libération de nickel est trop élevé (valeur mesurée jusqu'à 3,6 μg/cm2/semaine). Le nickel est un sensibilisant fort et provoque des réactions allergiques s'il est présent dans des articles qui entrent en contact direct et prolongé avec la peau.",
+    "product": {
+        "specificName": "1 pièce Bracelet métallique tressé pour femmes, mode élégante, polyvalente, sexy pour soirée, plage,",
+        "type": "Bracelet",
+        "description": "Bracelet en métal doré. Produit vendu en ligne, notamment via Shein (identifiant unique: sj25070488801004881).",
+        "family": "vêtements, mode, epi",
+        "category": "Bijoux",
+        "barcodes": [
+            "2507730027850"
+        ],
+        "batchNumbers": [
+            "13411995680",
+            "code rappel: 2507730027850"
+        ],
+        "packagingDescription": "Sac en plastique."
+    },
+    "commercialization": {
+        "originCountryName": "People's Republic of China",
+        "alertCountryName": "France",
+        "reactingCountries": [
+            "PL"
+        ],
+        "soldOnline": true
+    },
+    "measures": {
+        "recallPublishedOnline": true,
+        "measuresList": [
+            {
+                "category": "Avertissements des consommateurs à propos des risques",
+                "type": "Viêt Nam",
+                "effectiveDate": "2025-12-05"
+            },
+            {
+                "category": "Suppression du référencement de ce produit sur la place de marché électronique",
+                "type": "Viêt Nam",
+                "effectiveDate": "2025-12-05"
+            }
+        ],
+        "companyRecalls": [
+            {
+                "url": "https://m.shein.com/fr/ark/5343?scene_type=recall&banner_delivery_id=3695549",
+                "language": "FR"
+            }
+        ]
+    },
+    "media": {
+        "photos": [
+            "https://ec.europa.eu/safety-gate-alerts/public/api/notification/image/10984265",
+            "https://ec.europa.eu/safety-gate-alerts/public/api/notification/image/10984266",
+            "https://ec.europa.eu/safety-gate-alerts/public/api/notification/image/10984267"
+        ],
+        "recallSheetUrl": "https://rappel.conso.gouv.fr/fiche-rappel/49327/rapex"
+    }
+}
