@@ -1,21 +1,18 @@
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
-import CardActionArea from '@mui/material/CardActionArea';
 import CardContent from '@mui/material/CardContent';
 import Chip from '@mui/material/Chip';
 import Typography from '@mui/material/Typography';
 import { useIntl } from 'react-intl';
-import { Link } from 'react-router';
 import { type Alert } from '~/store/alertesApi';
 
 export function AlerteCard({ alerte }: { alerte: Alert }) {
   const intl = useIntl();
   const photo = alerte.media?.photos?.[0];
-  const url = `/alerte/${alerte.alertNumber}`;
 
   return (
-    <Card variant="outlined" component={ Link } to={ url } sx={ { textDecoration: 'none', color: 'inherit' } }>
-      <CardActionArea sx={ { display: 'flex', alignItems: 'center', justifyContent: 'flex-start' } }>
+    <Card sx={ { width: '100%', transition: 'border-color 0.2s, box-shadow 0.2s', border: '1px solid', borderColor: 'divider' } }>
+      <Box sx={ { display: 'flex', alignItems: 'center', justifyContent: 'flex-start' } }>
         { photo && (
           <Box
             component="img"
@@ -24,7 +21,7 @@ export function AlerteCard({ alerte }: { alerte: Alert }) {
             sx={ { width: 120, height: 120, objectFit: 'cover', flexShrink: 0 } }
           />
         ) }
-        <CardContent sx={ { flex: 1, py: 1.5 } }>
+        <CardContent sx={ { flex: 1, py: 1, '&:last-child': { pb: 1 } } }>
           <Typography variant="subtitle1" sx={ { fontWeight: 'bold' } } noWrap>
             { alerte.product?.specificName ?? alerte.alertNumber }
           </Typography>
@@ -49,7 +46,7 @@ export function AlerteCard({ alerte }: { alerte: Alert }) {
             </Typography>
           ) }
         </CardContent>
-      </CardActionArea>
+      </Box>
     </Card>
   );
 }

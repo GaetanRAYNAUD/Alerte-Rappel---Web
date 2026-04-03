@@ -1,16 +1,9 @@
 import CssBaseline from '@mui/material/CssBaseline';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { useMemo } from 'react';
 import { Provider as ReduxProvider } from 'react-redux';
-import {
-  Links,
-  Meta,
-  Outlet,
-  Scripts,
-  ScrollRestoration,
-  isRouteErrorResponse
-} from 'react-router';
+import { isRouteErrorResponse, Links, Meta, Outlet, Scripts, ScrollRestoration } from 'react-router';
 import { MainLayout } from '~/components/Layout/MainLayout';
 import { AppIntlProvider } from '~/i18n/IntlProvider';
 import { store } from '~/store';

@@ -11,10 +11,9 @@ import CardContent from '@mui/material/CardContent';
 import Chip from '@mui/material/Chip';
 import CircularProgress from '@mui/material/CircularProgress';
 import Dialog from '@mui/material/Dialog';
-import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { Link, useParams } from 'react-router';
 import fr from '~/i18n/messages/fr.json';
@@ -30,6 +29,12 @@ export default function AlerteDetail() {
   const intl = useIntl();
   const { '*': splatId } = useParams();
   const { data: alerte, isLoading } = useGetAlerteByIdQuery(splatId!);
+
+  useEffect(() => {
+    if (alerte) {
+      document.title = `${alerte.product?.specificName ?? alerte.alertNumber} — ${fr['app.title']}`;
+    }
+  }, [alerte]);
 
   if (isLoading) {
     return (

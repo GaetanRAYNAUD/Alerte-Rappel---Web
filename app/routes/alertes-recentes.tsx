@@ -1,12 +1,11 @@
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
-import Pagination from '@mui/material/Pagination';
 import Typography from '@mui/material/Typography';
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
+import { AlerteList } from '~/components/AlerteList';
 import fr from '~/i18n/messages/fr.json';
 import { useGetLatestAlertesQuery } from '~/store/alertesApi';
-import { AlerteCard } from '~/components/AlerteCard';
 
 export function meta() {
   return [
@@ -33,22 +32,11 @@ export default function AlertesRecentes() {
         { intl.formatMessage({ id: 'alerte.dernieres' }) }
       </Typography>
 
-      <Box sx={ { display: 'flex', flexDirection: 'column', gap: 2 } }>
-        { data?.content.map((alerte) => (
-          <AlerteCard key={ alerte.alertNumber } alerte={ alerte }/>
-        )) }
-      </Box>
-
-      { data && data.totalPages > 1 && (
-        <Box sx={ { display: 'flex', justifyContent: 'center', mt: 3 } }>
-          <Pagination
-            count={ data.totalPages }
-            page={ page + 1 }
-            onChange={ (_, value) => setPage(value - 1) }
-            color="primary"
-          />
-        </Box>
-      ) }
+      <AlerteList
+        data={data}
+        page={page}
+        onPageChange={setPage}
+      />
     </Box>
   );
 }

@@ -1,15 +1,14 @@
 import Box from '@mui/material/Box';
 import LinearProgress from '@mui/material/LinearProgress';
-import Pagination from '@mui/material/Pagination';
 import Typography from '@mui/material/Typography';
 import { useEffect } from 'react';
 import { useIntl } from 'react-intl';
 import { useSearchParams } from 'react-router';
-import fr from '~/i18n/messages/fr.json';
-import { useSearchAlertesQuery } from '~/store/alertesApi';
-import { AlerteCard } from '~/components/AlerteCard';
+import { AlerteList } from '~/components/AlerteList';
 import { SearchBar } from '~/components/SearchBar/SearchBar';
 import { useNavigateToRecherche } from '~/hooks/useNavigateToRecherche';
+import fr from '~/i18n/messages/fr.json';
+import { useSearchAlertesQuery } from '~/store/alertesApi';
 
 export function meta() {
   return [
@@ -60,36 +59,12 @@ export default function Recherche() {
         <>
           { isFetching && <LinearProgress sx={ { mb: 2 } }/> }
 
-          { data && data.content.length === 0 && !isFetching && (
-            <Typography color="text.secondary">
-              { intl.formatMessage({ id: 'search.noResults' }) }
-            </Typography>
-          ) }
-
-          { data && data.content.length > 0 && (
-            <>
-              <Typography variant="body2" color="text.secondary" sx={ { mb: 2 } }>
-                { intl.formatMessage({ id: 'search.resultsCount' }, { count: data.totalElements }) }
-              </Typography>
-
-              <Box sx={ { display: 'flex', flexDirection: 'column', gap: 2, opacity: isFetching ? 0.5 : 1, transition: 'opacity 0.2s' } }>
-                { data.content.map((alerte) => (
-                  <AlerteCard key={ alerte.alertNumber } alerte={ alerte }/>
-                )) }
-              </Box>
-
-              { data.totalPages > 1 && (
-                <Box sx={ { display: 'flex', justifyContent: 'center', mt: 3 } }>
-                  <Pagination
-                    count={ data.totalPages }
-                    page={ page + 1 }
-                    onChange={ handlePageChange }
-                    color="primary"
-                  />
-                </Box>
-              ) }
-            </>
-          ) }
+          <AlerteList
+            data={data}
+            isFetching={isFetching}
+            page={page}
+            onPageChange={(p) => setSearchParams({ q: query, page: String(p) })}
+          />
         </>
       ) }
     </Box>

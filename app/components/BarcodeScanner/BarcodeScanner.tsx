@@ -4,8 +4,8 @@ import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
-import Typography from '@mui/material/Typography';
 import { alpha, useTheme } from '@mui/material/styles';
+import Typography from '@mui/material/Typography';
 import { BrowserMultiFormatReader } from '@zxing/browser';
 import { useCallback, useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
@@ -80,7 +80,8 @@ export function BarcodeScanner({ onResult }: BarcodeScannerProps) {
       URL.revokeObjectURL(url);
 
       onResult(result.getText());
-    } catch {
+    } catch (e) {
+      console.error('Error decoding file:', e);
       setError(intl.formatMessage({ id: 'scanner.noCode' }));
     } finally {
       setDecoding(false);

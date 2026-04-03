@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from 'react';
+import { type ReactNode, useState } from 'react';
 import { IntlProvider as ReactIntlProvider } from 'react-intl';
 
 import en from './messages/en.json';
