@@ -13,6 +13,7 @@ export default defineConfig(({ mode }) => {
   if (isLocalEnv) {
     config.plugins?.push(basicSsl());
     config.server = {
+      host: true,
       port: 3000
     };
   }

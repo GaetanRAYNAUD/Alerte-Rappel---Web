@@ -7,6 +7,7 @@ import Typography from '@mui/material/Typography';
 import { useIntl } from 'react-intl';
 import { Link } from 'react-router';
 import { type Alert } from '~/store/alertesApi';
+
 import { AlerteCard } from './AlerteCard';
 
 interface AlerteListProps {

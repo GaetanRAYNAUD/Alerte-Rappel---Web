@@ -6,11 +6,13 @@ export function useNavigateToAlerte() {
   const navigate = useNavigate();
   const [triggerSearch] = useLazyGetAlerteByCodeBarresQuery();
 
-  const navigateByBarcode = useCallback(async (code: string) => {
+  const navigateByBarcode = useCallback(async (code: string): Promise<boolean> => {
     const { data: alerte } = await triggerSearch(code);
     if (alerte) {
       navigate(`/alerte/${alerte.alertNumber}`);
+      return true;
     }
+    return false;
   }, [navigate, triggerSearch]);
 
   const navigateById = useCallback((id: string) => {

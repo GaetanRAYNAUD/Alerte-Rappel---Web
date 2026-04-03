@@ -32,6 +32,7 @@
   "scanner.error": "Unable to access the camera. Try uploading an image.",
   "scanner.decoding": "Decoding...",
   "scanner.noCode": "No barcode detected in the image.",
+  "scanner.notFound": "No recall found for barcode {code}.",
   "alerte.dernieres": "Latest alerts",
   "alerte.detail": "Recall detail",
   "alerte.marque": "Brand",

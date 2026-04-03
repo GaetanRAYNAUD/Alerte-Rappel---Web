@@ -1,10 +1,12 @@
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import ImageSearchIcon from '@mui/icons-material/ImageSearch';
 import SearchIcon from '@mui/icons-material/Search';
+import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
+import { useCallback, useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { BarcodeScanner } from '~/components/BarcodeScanner/BarcodeScanner';
 import { useNavigateToAlerte } from '~/hooks/useNavigateToAlerte';
@@ -26,29 +28,76 @@ const features = [
 export default function Home() {
   const intl = useIntl();
   const { navigateByBarcode } = useNavigateToAlerte();
+  const [notFoundCode, setNotFoundCode] = useState<string | null>(null);
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [scanning, setScanning] = useState(false);
+  const prevImageUrlRef = useRef<string | null>(null);
+
+  const handleImageCapture = useCallback((url: string | null) => {
+    if (prevImageUrlRef.current) {
+      URL.revokeObjectURL(prevImageUrlRef.current);
+    }
+    prevImageUrlRef.current = url;
+    setImageUrl(url);
+  }, []);
+
+  const handleResult = useCallback(async (code: string) => {
+    setNotFoundCode(null);
+    const found = await navigateByBarcode(code);
+    if (!found) {
+      setNotFoundCode(code);
+    }
+  }, [navigateByBarcode]);
 
   return (
     <Box>
       {/* Hero */}
       <Box sx={{ textAlign: 'center', py: { xs: 4, sm: 8 } }}>
-        <Typography
-          variant="h3"
-          component="h1"
-          gutterBottom
-          sx={{ fontWeight: 'bold', fontSize: { xs: '1.8rem', sm: '2.5rem', md: '3rem' } }}
-        >
-          {intl.formatMessage({ id: 'home.hero.title' })}
-        </Typography>
-        <Typography
-          variant="h6"
-          color="text.secondary"
-          sx={{ mb: 5, maxWidth: 600, mx: 'auto', fontSize: { xs: '1rem', sm: '1.25rem' } }}
-        >
-          {intl.formatMessage({ id: 'home.hero.subtitle' })}
-        </Typography>
+        {!scanning && (
+          <>
+            <Typography
+              variant="h3"
+              component="h1"
+              gutterBottom
+              sx={{ fontWeight: 'bold', fontSize: { xs: '1.8rem', sm: '2.5rem', md: '3rem' } }}
+            >
+              {intl.formatMessage({ id: 'home.hero.title' })}
+            </Typography>
+            <Typography
+              variant="h6"
+              color="text.secondary"
+              sx={{ mb: 5, maxWidth: 600, mx: 'auto', fontSize: { xs: '1rem', sm: '1.25rem' } }}
+            >
+              {intl.formatMessage({ id: 'home.hero.subtitle' })}
+            </Typography>
+          </>
+        )}
 
         <Box sx={{ maxWidth: 500, mx: 'auto' }}>
-          <BarcodeScanner onResult={navigateByBarcode} />
+          <BarcodeScanner
+            onResult={handleResult}
+            onImageCapture={handleImageCapture}
+            onScanningChange={setScanning}
+          />
+          {notFoundCode && (
+            <Alert severity="info" sx={{ mt: 2 }}>
+              {intl.formatMessage({ id: 'scanner.notFound' }, { code: notFoundCode })}
+            </Alert>
+          )}
+          {imageUrl && (
+            <Box
+              component="img"
+              src={imageUrl}
+              alt="Uploaded barcode"
+              sx={{
+                mt: 2,
+                maxWidth: '100%',
+                maxHeight: 200,
+                borderRadius: 2,
+                objectFit: 'contain'
+              }}
+            />
+          )}
         </Box>
       </Box>
 

@@ -80,8 +80,8 @@ export default function AlerteDetail() {
               { alerte.publicationDate && (
                 <Typography variant="body2" color="text.secondary" gutterBottom>
                   { intl.formatMessage({ id: 'alerte.datePublication' }) } : { intl.formatDate(alerte.publicationDate, {
-                  year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'
-                }) }
+                    year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'
+                  }) }
                 </Typography>
               ) }
 
@@ -264,7 +264,9 @@ function PhotoCarousel({ photos, alt }: { photos: string[]; alt: string }) {
               } }
             >
               <IconButton
-                onClick={ (e) => { e.stopPropagation(); setIndex((i) => i - 1); } }
+                onClick={ (e) => {
+                  e.stopPropagation(); setIndex((i) => i - 1);
+                } }
                 disabled={ index === 0 }
                 size="small"
                 sx={ { color: '#fff', bgcolor: 'rgba(0,0,0,0.4)', '&:hover': { bgcolor: 'rgba(0,0,0,0.6)' } } }
@@ -278,7 +280,9 @@ function PhotoCarousel({ photos, alt }: { photos: string[]; alt: string }) {
                 { index + 1 } / { photos.length }
               </Typography>
               <IconButton
-                onClick={ (e) => { e.stopPropagation(); setIndex((i) => i + 1); } }
+                onClick={ (e) => {
+                  e.stopPropagation(); setIndex((i) => i + 1);
+                } }
                 disabled={ index === photos.length - 1 }
                 size="small"
                 sx={ { color: '#fff', bgcolor: 'rgba(0,0,0,0.4)', '&:hover': { bgcolor: 'rgba(0,0,0,0.6)' } } }

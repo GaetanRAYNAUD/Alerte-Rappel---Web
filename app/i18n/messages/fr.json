@@ -32,6 +32,7 @@
   "scanner.error": "Impossible d'accéder à la caméra. Essayez d'importer une image.",
   "scanner.decoding": "Décodage en cours...",
   "scanner.noCode": "Aucun code-barres détecté dans l'image.",
+  "scanner.notFound": "Aucun rappel trouvé pour le code-barres {code}.",
   "alerte.dernieres": "Dernières alertes",
   "alerte.detail": "Détail du rappel",
   "alerte.marque": "Marque",
