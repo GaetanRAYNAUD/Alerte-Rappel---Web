@@ -16,7 +16,8 @@ export function meta() {
 const faqItems = [
   { q: 'page.faq.q1', a: 'page.faq.a1' },
   { q: 'page.faq.q2', a: 'page.faq.a2' },
-  { q: 'page.faq.q3', a: 'page.faq.a3' }
+  { q: 'page.faq.q3', a: 'page.faq.a3' },
+  { q: 'page.faq.q4', a: 'page.faq.a4' }
 ];
 
 export default function FAQ() {
@@ -35,7 +36,7 @@ export default function FAQ() {
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
-            <Typography>{intl.formatMessage({ id: a })}</Typography>
+            <Typography dangerouslySetInnerHTML={{ __html: intl.formatMessage({ id: a }) }} />
           </AccordionDetails>
         </Accordion>
       ))}

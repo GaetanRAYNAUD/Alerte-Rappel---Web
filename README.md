@@ -1,87 +1,47 @@
-# Welcome to React Router!
+# Alerte Rappel - API
 
-A modern, production-ready template for building full-stack React applications using React Router.
+Alerte Rappel est une API qui centralise les alertes de rappel de produits de consommation provenant de deux sources officielles françaises et européennes.
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/remix-run/react-router-templates/tree/main/default)
+## Principe
 
-## Features
+Lorsqu'un produit est jugé dangereux ou non conforme, les autorités compétentes publient des avis de rappel afin d'informer les consommateurs et d'organiser le retrait du produit du marché. Ces informations sont diffusées par plusieurs organismes, chacun avec son propre format et ses propres données.
 
-- 🚀 Server-side rendering
-- ⚡️ Hot Module Replacement (HMR)
-- 📦 Asset bundling and optimization
-- 🔄 Data loading and mutations
-- 🔒 TypeScript by default
-- 🎉 TailwindCSS for styling
-- 📖 [React Router docs](https://reactrouter.com/)
+L'objectif d'Alerte Rappel est d'agréger ces sources dans un format unifié, afin de disposer d'un point d'accès unique et cohérent à l'ensemble des rappels disponibles.
 
-## Getting Started
+## Sources de données
 
-### Installation
+### RappelConso
 
-Install the dependencies:
+[RappelConso](https://rappelconso.beta.gouv.fr/) est la plateforme officielle du gouvernement français dédiée aux rappels de produits. Elle recense les avis de rappel publiés par les professionnels, couvrant une large variété de catégories : alimentation, jouets, électroménager, cosmétiques, véhicules, etc.
 
-```bash
-npm install
-```
+Les données sont mises à disposition en open data via la plateforme [data.gouv.fr](https://www.data.gouv.fr/).
 
-### Development
+### Safety Gate / RAPEX
 
-Start the development server with HMR:
+[Safety Gate](https://ec.europa.eu/safety-gate/) (anciennement RAPEX) est le système d'alerte rapide de l'Union européenne pour les produits de consommation dangereux. Il permet aux États membres de signaler et de partager les informations sur les produits présentant un risque sérieux pour la santé ou la sécurité des consommateurs.
 
-```bash
-npm run dev
-```
+Les alertes publiées sur Safety Gate concernent l'ensemble des pays membres de l'UE et sont accessibles via une API officielle de la Commission européenne.
 
-Your application will be available at `http://localhost:5173`.
+## Technique
 
-## Building for Production
+### Prérequis
 
-Create a production build:
+- Java 25+
+- Maven (ou utiliser le wrapper inclus `./mvnw`)
+
+### Build
 
 ```bash
-npm run build
+# Compiler et packager
+./mvnw clean package
+
+# Lancer l'application
+./mvnw spring-boot:run
+
+# Lancer les tests
+./mvnw test
 ```
 
-## Deployment
+## Licence
 
-### Docker Deployment
-
-To build and run using Docker:
-
-```bash
-docker build -t my-app .
-
-# Run the container
-docker run -p 3000:3000 my-app
-```
-
-The containerized application can be deployed to any platform that supports Docker, including:
-
-- AWS ECS
-- Google Cloud Run
-- Azure Container Apps
-- Digital Ocean App Platform
-- Fly.io
-- Railway
-
-### DIY Deployment
-
-If you're familiar with deploying Node applications, the built-in app server is production-ready.
-
-Make sure to deploy the output of `npm run build`
-
-```
-├── package.json
-├── package-lock.json (or pnpm-lock.yaml, or bun.lockb)
-├── build/
-│   ├── client/    # Static assets
-│   └── server/    # Server-side code
-```
-
-## Styling
-
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever CSS framework you prefer.
-
----
-
-Built with ❤️ using React Router.
+Ce projet est distribué sous licence [MIT](LICENSE).

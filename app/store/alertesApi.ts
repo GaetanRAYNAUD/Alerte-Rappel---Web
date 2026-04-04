@@ -63,6 +63,7 @@ export interface AlertCompanyRecall {
 export interface AlertMedia {
   photos?: string[];
   recallSheetUrl?: string;
+  recallPdfUrl?: string;
 }
 
 export interface PaginatedAlerts {

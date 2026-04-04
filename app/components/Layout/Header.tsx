@@ -17,7 +17,6 @@ import { SearchBar } from '~/components/SearchBar/SearchBar';
 import { useNavigateToRecherche } from '~/hooks/useNavigateToRecherche';
 
 const navItems = [
-  { labelId: 'nav.howItWorks', path: '/comment-ca-marche' },
   { labelId: 'nav.faq', path: '/faq' },
   { labelId: 'nav.contact', path: '/contact' }
 ] as const;
@@ -58,6 +57,16 @@ export function Header() {
             sx={{ display: { xs: 'none', md: 'flex' }, whiteSpace: 'nowrap', ml: 2, zIndex: 1 }}
           >
             {intl.formatMessage({ id: 'nav.alertes' })}
+          </Button>
+
+          <Button
+            component={Link}
+            to="/historique"
+            color="inherit"
+            size="small"
+            sx={{ display: { xs: 'none', md: 'flex' }, whiteSpace: 'nowrap', ml: 1, zIndex: 1 }}
+          >
+            {intl.formatMessage({ id: 'nav.historique' })}
           </Button>
 
           <Box sx={{

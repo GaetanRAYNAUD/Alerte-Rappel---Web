@@ -2,6 +2,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import CloseIcon from '@mui/icons-material/Close';
+import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import ZoomInIcon from '@mui/icons-material/ZoomIn';
 import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
@@ -13,11 +14,12 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Dialog from '@mui/material/Dialog';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { Link, useParams } from 'react-router';
 import fr from '~/i18n/messages/fr.json';
 import { useGetAlerteByIdQuery } from '~/store/alertesApi';
+import { getViewedAlerts, saveViewedAlert } from '~/utils/storage';
 
 export function meta() {
   return [
@@ -30,9 +32,16 @@ export default function AlerteDetail() {
   const { '*': splatId } = useParams();
   const { data: alerte, isLoading } = useGetAlerteByIdQuery(splatId!);
 
+  const viewedAt = useMemo(() => {
+    if (!alerte) return null;
+    const entry = getViewedAlerts().find((h) => h.alerte.alertNumber === alerte.alertNumber);
+    return entry?.viewedAt ?? null;
+  }, [alerte]);
+
   useEffect(() => {
     if (alerte) {
       document.title = `${alerte.product?.specificName ?? alerte.alertNumber} — ${fr['app.title']}`;
+      saveViewedAlert(alerte);
     }
   }, [alerte]);
 
@@ -63,7 +72,14 @@ export default function AlerteDetail() {
         { intl.formatMessage({ id: 'alerte.backHome' }) }
       </Button>
 
-      <Card>
+      <Card sx={ { position: 'relative' } }>
+        { viewedAt && (
+          <Typography variant="caption" color="text.secondary" sx={ { position: 'absolute', top: 12, right: 12 } }>
+            { intl.formatMessage({ id: 'alerte.viewedAt' }) } { intl.formatDate(viewedAt, {
+              year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'
+            }) }
+          </Typography>
+        ) }
         <CardContent>
           <Box sx={ { display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 3 } }>
             { alerte.media?.photos && alerte.media.photos.length > 0 && (
@@ -73,9 +89,23 @@ export default function AlerteDetail() {
             ) }
 
             <Box sx={ { flex: 1 } }>
-              <Typography variant="h5" gutterBottom sx={ { fontWeight: 'bold' } }>
-                { alerte.product?.specificName ?? alerte.alertNumber }
-              </Typography>
+              <Box sx={ { display: 'flex', alignItems: 'center', gap: 1, mb: 1 } }>
+                <Typography variant="h5" sx={ { fontWeight: 'bold' } }>
+                  { alerte.product?.specificName ?? alerte.alertNumber }
+                </Typography>
+                { alerte.media?.recallPdfUrl && (
+                  <IconButton
+                    component="a"
+                    href={ alerte.media.recallPdfUrl }
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    color="primary"
+                    aria-label={ intl.formatMessage({ id: 'alerte.downloadPdf' }) }
+                  >
+                    <PictureAsPdfIcon/>
+                  </IconButton>
+                ) }
+              </Box>
 
               { alerte.publicationDate && (
                 <Typography variant="body2" color="text.secondary" gutterBottom>
