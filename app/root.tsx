@@ -1,20 +1,25 @@
 import CssBaseline from '@mui/material/CssBaseline';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import { useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { Provider as ReduxProvider } from 'react-redux';
 import { isRouteErrorResponse, Links, Meta, Outlet, Scripts, ScrollRestoration } from 'react-router';
+import { ThemeModeContext } from '~/hooks/useThemeMode';
 import { MainLayout } from '~/components/Layout/MainLayout';
 import { AppIntlProvider } from '~/i18n/IntlProvider';
 import { store } from '~/store';
+import type { ThemeMode } from '~/utils/storage';
+import { getThemeMode, saveThemeMode } from '~/utils/storage';
 
 import type { Route } from './+types/root';
 
-function useAppTheme() {
+function useAppTheme(mode: ThemeMode) {
   const prefersDark = useMediaQuery('(prefers-color-scheme: dark)');
+  const isDark = mode === 'dark' || (mode === 'system' && prefersDark);
+
   return useMemo(() => createTheme({
     palette: {
-      mode: prefersDark ? 'dark' : 'light',
+      mode: isDark ? 'dark' : 'light',
       primary: {
         main: '#1565c0'
       },
@@ -25,7 +30,7 @@ function useAppTheme() {
     typography: {
       fontFamily: '"Nunito", "Helvetica", "Arial", sans-serif'
     }
-  }), [prefersDark]);
+  }), [isDark]);
 }
 
 export const links: Route.LinksFunction = () => [
@@ -60,17 +65,24 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-  const theme = useAppTheme();
+  const [mode, _setMode] = useState<ThemeMode>(getThemeMode);
+  const setMode = useCallback((m: ThemeMode) => {
+    _setMode(m);
+    saveThemeMode(m);
+  }, []);
+  const theme = useAppTheme(mode);
 
   return (
     <ReduxProvider store={store}>
       <AppIntlProvider>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          <MainLayout>
-            <Outlet />
-          </MainLayout>
-        </ThemeProvider>
+        <ThemeModeContext.Provider value={{ mode, setMode }}>
+          <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <MainLayout>
+              <Outlet />
+            </MainLayout>
+          </ThemeProvider>
+        </ThemeModeContext.Provider>
       </AppIntlProvider>
     </ReduxProvider>
   );

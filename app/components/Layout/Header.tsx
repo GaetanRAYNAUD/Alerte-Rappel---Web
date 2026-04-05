@@ -1,3 +1,6 @@
+import Brightness4Icon from '@mui/icons-material/Brightness4';
+import BrightnessAutoIcon from '@mui/icons-material/BrightnessAuto';
+import LightModeIcon from '@mui/icons-material/LightMode';
 import MenuIcon from '@mui/icons-material/Menu';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -9,17 +12,39 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import Toolbar from '@mui/material/Toolbar';
+import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { Link, useSearchParams } from 'react-router';
 import { SearchBar } from '~/components/SearchBar/SearchBar';
 import { useNavigateToRecherche } from '~/hooks/useNavigateToRecherche';
+import { useThemeMode } from '~/hooks/useThemeMode';
+import type { ThemeMode } from '~/utils/storage';
 
 const navItems = [
   { labelId: 'nav.faq', path: '/faq' },
-  { labelId: 'nav.contact', path: '/contact' }
+  { labelId: 'nav.contact', path: '/contact' },
+  { labelId: 'nav.legal', path: '/mentions-legales' }
 ] as const;
+
+const themeIcons: Record<ThemeMode, typeof BrightnessAutoIcon> = {
+  system: BrightnessAutoIcon,
+  light: LightModeIcon,
+  dark: Brightness4Icon
+};
+
+const nextMode: Record<ThemeMode, ThemeMode> = {
+  system: 'light',
+  light: 'dark',
+  dark: 'system'
+};
+
+const themeLabelIds: Record<ThemeMode, string> = {
+  system: 'theme.system',
+  light: 'theme.light',
+  dark: 'theme.dark'
+};
 
 export function Header() {
   const intl = useIntl();
@@ -27,6 +52,8 @@ export function Header() {
   const query = searchParams.get('q') ?? '';
   const [drawerOpen, setDrawerOpen] = useState(false);
   const { navigateToRecherche } = useNavigateToRecherche();
+  const { mode, setMode } = useThemeMode();
+  const ThemeIcon = themeIcons[mode];
 
   return (
     <>
@@ -87,6 +114,12 @@ export function Header() {
           </Box>
 
           <Box sx={{ flex: 1 }} />
+
+          <Tooltip title={intl.formatMessage({ id: themeLabelIds[nextMode[mode]] })}>
+            <IconButton color="inherit" onClick={() => setMode(nextMode[mode])} sx={{ zIndex: 1 }}>
+              <ThemeIcon />
+            </IconButton>
+          </Tooltip>
 
           <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 0.5, zIndex: 1 }}>
             {navItems.map((item) => (

@@ -66,6 +66,12 @@ export interface AlertMedia {
   recallPdfUrl?: string;
 }
 
+export interface SearchSuggestion {
+  text: string;
+  type: string;
+  count: number;
+}
+
 export interface PaginatedAlerts {
   content: Alert[];
   page: number;
@@ -79,7 +85,7 @@ export const alertesApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: config.apiBaseUrl }),
   endpoints: (builder) => ({
     getAlerteById: builder.query<Alert, string>({
-      query: (id) => `/public/alerts/${id}`
+      query: (id) => `/public/alerts/details/${id}`
     }),
     getAlerteByCodeBarres: builder.query<Alert, string>({
       query: (barcode) => `/public/alerts/barcode/${barcode}`
@@ -89,6 +95,9 @@ export const alertesApi = createApi({
     }),
     searchAlertes: builder.query<PaginatedAlerts, { q: string; page: number }>({
       query: ({ q, page }) => `/public/alerts/search?q=${encodeURIComponent(q)}&page=${page}`
+    }),
+    suggestAlertes: builder.query<SearchSuggestion[], string>({
+      query: (q) => `/public/alerts/suggest?q=${encodeURIComponent(q)}`
     })
   })
 });
@@ -98,5 +107,6 @@ export const {
   useGetAlerteByCodeBarresQuery,
   useLazyGetAlerteByCodeBarresQuery,
   useGetLatestAlertesQuery,
-  useSearchAlertesQuery
+  useSearchAlertesQuery,
+  useLazySuggestAlertesQuery
 } = alertesApi;

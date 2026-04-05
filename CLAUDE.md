@@ -6,6 +6,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Alerte Rappel is a French consumer product recall alert web application. It allows users to search for product recalls by alert number, barcode (including barcode scanning via camera), or free-text search. The app is in French by default with English i18n support.
 
+Data comes from two official sources: RappelConso (France) and Safety Gate/RAPEX (EU). The app does not produce its own data.
+
 ## Commands
 
 - `npm run dev` — Start dev server on https://localhost:3000 (with self-signed SSL)
@@ -21,22 +23,33 @@ Alerte Rappel is a French consumer product recall alert web application. It allo
 - **State/Data**: Redux Toolkit with RTK Query (`app/store/alertesApi.ts`) for API calls
 - **i18n**: react-intl with JSON message files in `app/i18n/messages/`
 - **Routing**: Manual route config in `app/routes.ts` (not file-based)
+- **Theme**: Light/dark/system mode via `ThemeModeContext` (`app/hooks/useThemeMode.ts`), persisted in localStorage
 
 ### Provider Stack (root.tsx)
 
-ReduxProvider → AppIntlProvider → ThemeProvider (MUI with auto dark/light mode) → MainLayout → Outlet
+ReduxProvider → AppIntlProvider → ThemeModeContext.Provider → ThemeProvider (MUI) → MainLayout → Outlet
 
 ### API Layer
 
-RTK Query api defined in `app/store/alertesApi.ts` hits a backend configured via `VITE_API_BASE_URL` env var (dev: `http://localhost:9090`). Endpoints: get alert by ID, get alert by barcode, get latest alerts, search alerts. See `docs/alert-example.json` for a full API response example.
+RTK Query api defined in `app/store/alertesApi.ts` hits a backend configured via `VITE_API_BASE_URL` env var (dev: `http://localhost:9090`). Endpoints: get alert by ID, get alert by barcode, get latest alerts, search alerts, suggest alerts. See `docs/alert-example.json` for a full API response example.
 
 ### Search
 
-The header SearchBar (`app/components/SearchBar/SearchBar.tsx`) navigates to `/recherche?q=...` on submit. The search page (`app/routes/recherche.tsx`) reads `q` and `page` from URL search params and calls the `searchAlertes` RTK Query endpoint. When refetching, existing results stay visible (dimmed) with a `LinearProgress` bar — never replace content with a full-screen spinner.
+The header SearchBar (`app/components/SearchBar/SearchBar.tsx`) navigates to `/recherche?q=...` on submit (Enter, click, or suggestion selection — no auto-search on typing). The SearchBar fetches suggestions from the `suggestAlertes` endpoint (debounced 300ms, min 2 chars) and displays them below the search history (max 5 items) in a dropdown.
+
+The search page (`app/routes/recherche.tsx`) reads `q` and `page` from URL search params and calls the `searchAlertes` RTK Query endpoint. When refetching, existing results stay visible (dimmed) with a `LinearProgress` bar — never replace content with a full-screen spinner.
+
+### Barcode Scanner
+
+`app/components/BarcodeScanner/BarcodeScanner.tsx` supports camera scanning and image upload. On match, a recall dialog (`AlerteRecallDialog`) is shown with product name, image, brand, and recall reason before navigating to the detail page.
 
 ### Path Alias
 
 `~/` maps to `./app/` (configured in tsconfig.json and resolved by vite-tsconfig-paths).
+
+### localStorage
+
+Managed via `app/utils/storage.ts`: search history (max 5), viewed alert history (max 15), theme mode preference.
 
 ## Code Style (enforced by ESLint)
 

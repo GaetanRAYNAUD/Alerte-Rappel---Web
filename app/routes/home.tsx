@@ -8,9 +8,11 @@ import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import { useCallback, useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
+import { AlerteRecallDialog } from '~/components/AlerteRecallDialog';
 import { BarcodeScanner } from '~/components/BarcodeScanner/BarcodeScanner';
-import { useNavigateToAlerte } from '~/hooks/useNavigateToAlerte';
 import fr from '~/i18n/messages/fr.json';
+import type { Alert as AlertType } from '~/store/alertesApi';
+import { useLazyGetAlerteByCodeBarresQuery } from '~/store/alertesApi';
 
 export function meta() {
   return [
@@ -27,8 +29,9 @@ const features = [
 
 export default function Home() {
   const intl = useIntl();
-  const { navigateByBarcode } = useNavigateToAlerte();
+  const [triggerSearch] = useLazyGetAlerteByCodeBarresQuery();
   const [notFoundCode, setNotFoundCode] = useState<string | null>(null);
+  const [matchedAlerte, setMatchedAlerte] = useState<AlertType | null>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [scanning, setScanning] = useState(false);
   const prevImageUrlRef = useRef<string | null>(null);
@@ -43,11 +46,17 @@ export default function Home() {
 
   const handleResult = useCallback(async (code: string) => {
     setNotFoundCode(null);
-    const found = await navigateByBarcode(code);
-    if (!found) {
+    try {
+      const { data: alerte } = await triggerSearch(code, true);
+      if (alerte) {
+        setMatchedAlerte(alerte);
+      } else {
+        setNotFoundCode(code);
+      }
+    } catch {
       setNotFoundCode(code);
     }
-  }, [navigateByBarcode]);
+  }, [triggerSearch]);
 
   return (
     <Box>
@@ -124,6 +133,8 @@ export default function Home() {
           </Card>
         ))}
       </Box>
+
+      <AlerteRecallDialog alerte={matchedAlerte} onClose={() => setMatchedAlerte(null)} />
     </Box>
   );
 }

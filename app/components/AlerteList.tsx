@@ -88,7 +88,9 @@ export function AlerteList({ data, isFetching, page = 0, onPageChange, onRemove 
                       { onRemove && (
                         <IconButton
                           size="small"
-                          onClick={ (e) => { e.preventDefault(); e.stopPropagation(); onRemove(alerte.alertNumber); } }
+                          onClick={ (e) => {
+                            e.preventDefault(); e.stopPropagation(); onRemove(alerte.alertNumber);
+                          } }
                           aria-label={ intl.formatMessage({ id: 'historique.remove' }) }
                         >
                           <DeleteIcon fontSize="small"/>
