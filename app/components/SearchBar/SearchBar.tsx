@@ -147,7 +147,7 @@ export function SearchBar({ onSearch, defaultValue = '' }: SearchBarProps) {
       />
 
       <Popper open={ open && hasItems } anchorEl={ anchorRef.current }
-              sx={ { zIndex: 1200, width: anchorRef.current?.offsetWidth } }>
+        sx={ { zIndex: 1200, width: anchorRef.current?.offsetWidth } }>
         <Paper elevation={ 3 } sx={ { mt: 1 } }>
           <List dense>
             { history.map((item) => (
